@@ -10,8 +10,8 @@
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
-//#include <stdlib.h>
 #include <time.h>
+
 #define REDLED buildLED(1,255,0,0);
 #define GREENLED buildLED(1,0,255,0);
 #define BLUELED buildLED(1,0,0,255);
@@ -71,69 +71,9 @@ void seedRandom(void)
 
 
 
-void movingled(int bright, int ledcount)
+void buildLED(int bright, int red, int green, int blue)
 {
-	ledcount = 64;
-	volatile int counter;
-	int x = 0;
-	SPI_init();
-	/* Replace with your application code */
-	while (1)
-	{
-		if (x == ledcount)
-		{
-			x = 0;
-		}
-		SPI_masterTransmitByte(0);
-		SPI_masterTransmitByte(0);
-		SPI_masterTransmitByte(0);
-		SPI_masterTransmitByte(0);
-		
-		for (int i = 1; i <= x;i++)
-		{
-			SPI_masterTransmitByte(255);
-			SPI_masterTransmitByte(0);
-			SPI_masterTransmitByte(0);
-			SPI_masterTransmitByte(0);
-		}
-		if (x < ledcount)
-		{
-			x++;
-			counter = x;
-		}
-		SPI_masterTransmitByte(225);
-		SPI_masterTransmitByte(255);
-		SPI_masterTransmitByte(0);
-		SPI_masterTransmitByte(0);
-		
-		for (counter; (counter <= ledcount);counter++)
-		{
-			SPI_masterTransmitByte(255);
-			SPI_masterTransmitByte(0);
-			SPI_masterTransmitByte(0);
-			SPI_masterTransmitByte(0);
-		}
-		
-		/*SPI_masterTransmitByte(255);
-		SPI_masterTransmitByte(255);
-		SPI_masterTransmitByte(255);
-		SPI_masterTransmitByte(255);*/
-		
-		SPI_masterTransmitByte(0);
-		SPI_masterTransmitByte(0);
-		SPI_masterTransmitByte(0);
-		SPI_masterTransmitByte(0);
-		
-		_delay_ms(50);
-	}
-}
-
-
-
-
-void buildLED(int brightness, int red, int green, int blue)
-{
-	SPI_masterTransmitByte(224+brightness);
+	SPI_masterTransmitByte(224+bright);
 	SPI_masterTransmitByte(blue);
 	SPI_masterTransmitByte(green);
 	SPI_masterTransmitByte(red);
@@ -157,57 +97,46 @@ void resetBoard(int ledcount)
 	emptyFrame();
 }
 
-void matrixeffect(int bright, int ledcount)
+
+void movingled(int bright, int ledcount, int red, int green, int blue)
 {
-	char ledarray[ledcount];
-	int rowlenght = sqrt(ledcount);
-	char ledrow[rowlenght+1];
-	char x[2];
+	volatile int counter;
+	int x = 0;
 	
 	while (1)
 	{
-	
-	
-	//create row with random 0/1
-	for (int i=0; i < rowlenght; i++)
-	{
-		int foo = rand() > RAND_MAX/2;
-		sprintf(x,"%d", foo);
-		ledrow[i] = *x;
-	}
-	
-	
-	strcat(ledarray, ledrow); //concatenate the char array
-	
-	char kokos[] = "111111111111111";
-	emptyFrame();
-	for (int i = strlen(kokos); i >= 1; i--)
-	{
-		if (kokos[i] == '1')
+		if (x == ledcount)
 		{
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
+			x = 0;
 		}
-		else
+		emptyFrame();
+		
+		for (int i = 1; i <= x;i++)
 		{
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
-			buildLED(1,0,255,0);
+			OFFLED
 		}
-	}
-	emptyFrame();
+		if (x < ledcount)
+		{
+			x++;
+			counter = x;
+		}
+		buildLED(bright,red,green,blue);
+		
+		for (counter; (counter <= ledcount);counter++)
+		{
+			OFFLED
+		}
+		
+		_delay_ms(45);
 	}
 }
 
-void matrixeffect1(int bright, int ledcount, int speed)
+
+
+
+void matrixeffect(int bright, int ledcount)  
 {
+	//LED MODULE SHOULD BE SQUARE IN ORDER TO WORK NICELY
 	char ledarray[ledcount+1];
 	int rowlenght = sqrt(ledcount); //lenght of a row
 	char ledrow[rowlenght];
@@ -258,32 +187,70 @@ void matrixeffect1(int bright, int ledcount, int speed)
 	}
 }
 
-void skuska(void)
+	
+void staticlights(int bright, int red, int green, int blue, int ledcount)
 {
-	static bool initialized;
-	if (!initialized) {
-		initialized = true;
-		// do the initialization part
-		resetBoard(64);
-	}
-	char kokos[] = "101011010011011";
 	emptyFrame();
-	for (int i = 20; i >= 1; i--)
+	for (int i = 1; i <= ledcount;i++)
+	{	
+		buildLED(bright,red, green, blue);	
+	}
+}
+
+
+void nyancat(int bright, int ledcount)
+{
+	volatile int counter;
+	int x = 0;
+
+	while (1)
 	{
-		if (kokos[i] == '1')
+		if (x == ledcount)
 		{
-			GREENLED;
+			x = 0;
 		}
-		else
+		emptyFrame();
+		
+		for (int i = 1; i <= x;i++)
 		{
-			OFFLED;
+			OFFLED
 		}
+		if (x < (ledcount))
+		{
+			x++;
+			counter = x;
+		}
+		
+		REDLED
+		buildLED(bright, 253,153,0);
+		buildLED(bright, 253,253,0);
+		buildLED(bright, 51,253,0);
+		buildLED(bright, 0,152,254);
+		buildLED(bright, 102,51, 253);
+
+		
+		for (counter; ((counter) <= ledcount);counter++)
+		{
+			OFFLED
+		}
+		
+		_delay_ms(60);
 	}
-	emptyFrame();
 }
 	
-	
-	
+void apaControl(int bright, int ledcount, int effectname, int red = 102, int green = 51, int blue =253)
+{
+	switch(effectname){
+		case 11: // 11 = movingled EFFECT
+				movingled(bright, ledcount, red, green, blue);
+		case 22: // 22= matrixeffect is only GREEN
+				matrixeffect(bright, ledcount);
+		case 33:  // 44 = nyancat EFFECT
+				nyancat(bright,ledcount);
+		case 99:  // 99 = staticlights EFFECT
+				staticlights(bright, red, green, blue, ledcount);
+	}
+}
 
 
 
@@ -295,10 +262,11 @@ int main(void)
 	
 	while(1)
 	{
-		
-		//skuska();
-		//movingled(30,30);
-		matrixeffect1(1,64,5);
+		//movingled(2,64);
+		//matrixeffect(1,64);
+		//staticlights(3, 255,0,0,63);
+		//nyancat(1, 64);
+		apaControl(1,64, 11, 100, 50,150);
 	}
 }
 
