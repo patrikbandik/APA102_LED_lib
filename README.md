@@ -1,6 +1,6 @@
 # APA102 LED Library
 Click on the image to watch a demonstration video
-[![Watch the video](https://user-images.githubusercontent.com/57394912/100681331-c425cf80-3373-11eb-8953-f07d3ce68d79.png)](https://bit.ly/embapaprojekt)
+[![Watch the video](https://user-images.githubusercontent.com/57394912/100684784-4960b280-337b-11eb-9858-d13cd59a71a3.png)](https://bit.ly/embapaprojekt)
 
 ## Use of the library and included functionality
 The library was made with flexibility/readability and ease of use in mind and is made with procedural 
