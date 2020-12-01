@@ -1,5 +1,7 @@
 # APA102 LED Library
-Click on the image to watch a demonstration video
+![image](https://user-images.githubusercontent.com/57394912/100684872-7ad97e00-337b-11eb-8f8e-e561e6dd5c0c.png)
+---
+<div align="center">  Click on the image to watch a demonstration video </div>
 [![Watch the video](https://user-images.githubusercontent.com/57394912/100684784-4960b280-337b-11eb-9858-d13cd59a71a3.png)](https://bit.ly/embapaprojekt)
 
 ## Use of the library and included functionality
